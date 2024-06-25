@@ -51,7 +51,7 @@ pip install pysheds matplotlib pyproj shapely geopandas numpy networkx geopy fol
 Execute the script using Python:
 
 ```bash
-python dem_analysis.py
+watershed_delineation_stream_network.py
 ```
 
 The script will:
