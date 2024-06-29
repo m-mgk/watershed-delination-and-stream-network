@@ -15,7 +15,6 @@ import folium
 import pandas as pd
 from io import StringIO
 import requests
-import geopandas as gpd
 
 # DEM MUST BE IN WGS 1984 COORDINATES
 ##########################################
