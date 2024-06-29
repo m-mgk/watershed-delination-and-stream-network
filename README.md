@@ -32,13 +32,15 @@ The following Python packages are required:
 - `networkx`
 - `geopy`
 - `folium`
+- `pandas`
+- `requests`
 
 ## Installation
 
 To install the necessary packages, run the following command:
 
 ```bash
-pip install pysheds matplotlib pyproj shapely geopandas numpy networkx geopy folium
+pip install pysheds matplotlib pyproj shapely geopandas numpy networkx geopy folium pandas requests
 ```
 
 ## Usage
@@ -66,6 +68,7 @@ The script will:
 8. Compute the principal channel length and average slope.
 9. Generate and save plots for various stages of the analysis.
 10. Create an interactive map with the catchment boundary and river network.
+11. It also gets the watershed area from Global Watershed API to compare the results
 
 ## Outputs
 
@@ -92,6 +95,7 @@ Stream Node 1 Elevation: XXX.XXX meters
 Stream Node 2 Elevation: XXX.XXX meters
 Weighted Average Slope: X.XXXXX or X.XXX%
 Watershed Area: XX.XXX square kilometers
+Watershed Area (global watershed): XX.XXX square kilometers
 ```
 
 ## License
