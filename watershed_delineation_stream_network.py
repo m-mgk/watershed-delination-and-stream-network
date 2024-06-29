@@ -12,6 +12,10 @@ warnings.filterwarnings('ignore')
 import os
 from datetime import datetime
 import folium
+import pandas as pd
+from io import StringIO
+import requests
+import geopandas as gpd
 
 # DEM MUST BE IN WGS 1984 COORDINATES
 ##########################################
@@ -481,7 +485,25 @@ folium_map.save(map_file_path)
 # folium_map  # Uncomment this line if you are running in a Jupyter Notebook and want to display the map inline
 
 
+# Function to get watershed area from the API
+def get_watershed_area(lat, lng):
+    url = f"https://mghydro.com/app/watershed_api?lat={lat}&lng={lng}&precision=high"
+    r = requests.get(url=url)
+    
+    if r.status_code == 200:
+        data = r.json()  # Unpack the GeoJSON string to a Python dictionary
+        watershed_gdf = gpd.GeoDataFrame.from_features(data['features'])
+        watershed_gdf.set_crs('EPSG:4326', inplace=True)
+        
+        # Calculate area directly in square meters
+        area_sq_meters = watershed_gdf.geometry.to_crs({'proj': 'cea'}).area.sum()  # Project to equal area projection for accurate area calculation
+        area_sq_km = area_sq_meters / 1_000_000  # Convert to square kilometers
+        
+        return area_sq_km
+    else:
+        return None
 
+global_dem_watershed = get_watershed_area(lat, long)
 
 
 ############################################################################
@@ -497,7 +519,8 @@ outputs = [
     f"Stream Node 1 Elevation: {elevations[0]:.3f} meters",
     f"Stream Node 2 Elevation: {elevations[-1]:.3f} meters",
     f"Weighted Average Slope: {average_slope:.5f} or {100*average_slope:.3f}%",
-    f"Watershed Area: {watershed_area:.3f} square kilometers"
+    f"Watershed Area: {watershed_area:.3f} square kilometers",
+    f"Watershed Area (global watershed) :{global_dem_watershed:.3f} square kilometers"
 ]
 
 # Write the outputs to the text file
